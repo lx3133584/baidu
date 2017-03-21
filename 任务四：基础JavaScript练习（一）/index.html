@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>IFE JavaScript Task 04</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0
+        }
+        
+        div {
+            margin: 100px auto;
+            text-align: center;
+        }
+        
+        #list li {
+            display: inline-block;
+            margin: 1em;
+            width: 2em;
+            height: 2em;
+            line-height: 2em;
+            font-size: 1rem;
+            background: red;
+            color: #fff;
+            cursor: pointer;
+        }
+        
+        button {
+            margin: 2em;
+            width: 4em;
+            height: 1.5em;
+            line-height: 1.5em;
+            font-size: 1rem;
+            background: #eee;
+            border-radius: 2px;
+            color: #000;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        输入框：<input type="text" id="api-input"><br>
+        <button id="add-l">左侧入</button>
+        <button id="add-r">右侧入</button><br>
+        <button id="remove-l">左侧出</button>
+        <button id="remove-r">右侧出</button>
+    </div>
+    <div>
+        <ul id="list"></ul>
+    </div>
+    <script type="text/javascript">
+        (function () {
+            var apiInput = document.getElementById("api-input");
+            var addL = document.getElementById("add-l");
+            var addR = document.getElementById("add-r");
+            var removeL = document.getElementById("remove-l");
+            var removeR = document.getElementById("remove-r");
+            var list = document.getElementById("list");
+            addL.addEventListener("click", function () {//左侧入功能按钮
+                var item = document.createElement("li");
+                if (/^\d{1,3}$/.test(apiInput.value)) {//输入符合条件的数字，否则弹出警告
+                    item.innerHTML = apiInput.value;
+                    list.insertBefore(item, list.firstChild);
+                    apiInput.value = null;
+                } else {
+                    alert("请输入0-999之间的数字")
+                }
+            })
+            addR.addEventListener("click", function () {//右侧入功能按钮
+                var item = document.createElement("li");
+                if (/^\d{1,3}$/.test(apiInput.value)) {
+                    item.innerHTML = apiInput.value;
+                    list.appendChild(item);
+                    apiInput.value = null;
+                } else {
+                    alert("请输入0-999之间的数字")
+                }
+            })
+            removeL.addEventListener("click", function () {//左侧出功能按钮
+                list.removeChild(list.firstChild);
+            })
+            removeR.addEventListener("click", function () {//右侧出功能按钮
+                list.removeChild(list.lastChild);
+            })
+            list.addEventListener("click", function (e) {//给list添加事件委托，点击数字删除这个数字
+                e = e || window.event;
+                var target = e.target || e.srcElement;
+                if(target.nodeName.toLowerCase() === "li")
+                list.removeChild(target);
+            })
+
+
+
+        })()
+    </script>
+</body>
+
+</html>
