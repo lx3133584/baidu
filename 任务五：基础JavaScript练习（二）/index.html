@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>IFE JavaScript Task 04</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0
+        }
+        
+        div {
+            position: relative;
+            margin: 220px auto;
+            text-align: center;
+        }
+        
+        #list {
+            position: absolute;
+            bottom: 0px;
+        }
+        
+        #list li {
+            display: inline-block;
+            margin: 1em;
+            width: 2em;
+            font-size: 1rem;
+            background: red;
+            color: #fff;
+            cursor: pointer;
+        }
+        
+        button {
+            margin: 0.5em 1em;
+            width: 4em;
+            height: 1.5em;
+            line-height: 1.5em;
+            font-size: 1rem;
+            background: #eee;
+            border-radius: 2px;
+            color: #000;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        输入框：<input type="text" id="api-input"><button id="api-sort">排序</button><br>
+        <button id="add-l">左侧入</button>
+        <button id="add-r">右侧入</button><br>
+        <button id="remove-l">左侧出</button>
+        <button id="remove-r">右侧出</button>
+    </div>
+    <div>
+        <ul id="list"></ul>
+    </div>
+    <script type="text/javascript">
+        (function () {
+            var apiInput = document.getElementById("api-input");
+            var addL = document.getElementById("add-l");
+            var addR = document.getElementById("add-r");
+            var removeL = document.getElementById("remove-l");
+            var removeR = document.getElementById("remove-r");
+            var list = document.getElementById("list");
+            var apiSort = document.getElementById("api-sort");
+            addL.addEventListener("click", function () {//左侧入功能按钮
+                var item = document.createElement("li");
+                if (apiInput.value >= 10 && apiInput.value <= 100) {//输入符合条件的数字，否则弹出警告
+                    if (list.childNodes.length <= 60) {
+                        list.insertBefore(item, list.firstChild);
+                        item.style.height = apiInput.value * 2 + "px";
+                        apiInput.value = null;
+                    } else {
+                        alert("队列元素最多60个")
+                    }
+                } else {
+                    alert("请输入10-100之间的数字")
+                }
+            })
+            addR.addEventListener("click", function () {//右侧入功能按钮
+                var item = document.createElement("li");
+                if (apiInput.value >= 10 && apiInput.value <= 100) {
+                    if (list.childNodes.length <= 60) {
+                        list.appendChild(item);
+                        item.style.height = apiInput.value * 2 + "px";
+                        apiInput.value = null;
+                    } else {
+                        alert("队列元素最多60个")
+                    }
+                } else {
+                    alert("请输入10-100之间的数字")
+                }
+            })
+            removeL.addEventListener("click", function () {//左侧出功能按钮
+                list.removeChild(list.firstChild);
+            })
+            removeR.addEventListener("click", function () {//右侧出功能按钮
+                list.removeChild(list.lastChild);
+            })
+            list.addEventListener("click", function (e) {//给list添加事件委托，点击数字删除这个数字
+                e = e || window.event;
+                var target = e.target || e.srcElement;
+                if (target.nodeName.toLowerCase() === "li")
+                    list.removeChild(target);
+            })
+            apiSort.addEventListener("click", function () {
+                for (var m = 0; m < list.childNodes.length - 1; m++) {
+                    for (var n = m + 1; n < list.childNodes.length; n++) {
+                        setTimeout(function(){
+                            list.childNodes[m].style.bottom = 10 + "px";
+                            list.childNodes[n].style.bottom = 10 + "px";
+                            list.childNodes[m].style.backgroundColor = "blue";
+                            list.childNodes[n].style.backgroundColor = "blue";
+                        },500*(m+1)*n)
+                        setTimeout(function(){
+                            if (list.childNodes[m] < list.childNodes[n]) {
+                            var temp = list.childNodes[m];
+                            list.replaceChild(childNodes[n], childNodes[m]);
+                            list.replaceChild(temp, childNodes[n]);
+                        }
+                        },500*(m+1)*n)
+                        setTimeout(function(){
+                            list.childNodes[m].style.bottom = 0 + "px";
+                            list.childNodes[n].style.bottom = 0 + "px";
+                            list.childNodes[m].style.backgroundColor = "red";
+                            list.childNodes[n].style.backgroundColor = "red";
+                        },500*(m+1)*n)                  
+                    }
+                }
+            })
+        })()
+    </script>
+</body>
+
+</html>
