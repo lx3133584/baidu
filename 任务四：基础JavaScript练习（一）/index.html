@@ -83,16 +83,20 @@
                 }
             })
             removeL.addEventListener("click", function () {//左侧出功能按钮
+                alert(list.firstChild.innerHTML);
                 list.removeChild(list.firstChild);
             })
             removeR.addEventListener("click", function () {//右侧出功能按钮
+                alert(list.firstChild.innerHTML);
                 list.removeChild(list.lastChild);
             })
             list.addEventListener("click", function (e) {//给list添加事件委托，点击数字删除这个数字
                 e = e || window.event;
                 var target = e.target || e.srcElement;
-                if(target.nodeName.toLowerCase() === "li")
-                list.removeChild(target);
+                if(target.nodeName.toLowerCase() === "li"){
+                    alert(list.firstChild.innerHTML);
+                    list.removeChild(target);
+                }
             })
 
 
