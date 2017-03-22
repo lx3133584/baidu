@@ -21,16 +21,28 @@
         #list {
             position: absolute;
             bottom: 0px;
+            border-bottom: #000 2px solid;
         }
         
         #list li {
+            position: relative;
             display: inline-block;
-            margin: 1em;
+            margin: 2em 1em -4px 1em;
             width: 2em;
             font-size: 1rem;
             background: red;
             color: #fff;
             cursor: pointer;
+        }
+
+        #list .cur{
+            bottom: 10px;
+            background: blue;
+        }
+
+        #list .fin{
+            bottom: 0;
+            background: greenyellow;
         }
         
         button {
@@ -49,7 +61,7 @@
 
 <body>
     <div>
-        输入框：<input type="text" id="api-input"><button id="api-sort">排序</button><br>
+        输入框：<input type="text" id="api-input"><button id="api-sort">排序</button><button id="random">生成</button><br>
         <button id="add-l">左侧入</button>
         <button id="add-r">右侧入</button><br>
         <button id="remove-l">左侧出</button>
@@ -67,6 +79,7 @@
             var removeR = document.getElementById("remove-r");
             var list = document.getElementById("list");
             var apiSort = document.getElementById("api-sort");
+            var random = document.getElementById("random");
             addL.addEventListener("click", function () {//左侧入功能按钮
                 var item = document.createElement("li");
                 if (apiInput.value >= 10 && apiInput.value <= 100) {//输入符合条件的数字，否则弹出警告
@@ -108,28 +121,42 @@
                     list.removeChild(target);
             })
             apiSort.addEventListener("click", function () {
-                for (var m = 0; m < list.childNodes.length - 1; m++) {
-                    for (var n = m + 1; n < list.childNodes.length; n++) {
-                        setTimeout(function(){
-                            list.childNodes[m].style.bottom = 10 + "px";
-                            list.childNodes[n].style.bottom = 10 + "px";
-                            list.childNodes[m].style.backgroundColor = "blue";
-                            list.childNodes[n].style.backgroundColor = "blue";
-                        },500*(m+1)*n)
-                        setTimeout(function(){
-                            if (list.childNodes[m] < list.childNodes[n]) {
-                            var temp = list.childNodes[m];
-                            list.replaceChild(childNodes[n], childNodes[m]);
-                            list.replaceChild(temp, childNodes[n]);
-                        }
-                        },500*(m+1)*n)
-                        setTimeout(function(){
-                            list.childNodes[m].style.bottom = 0 + "px";
-                            list.childNodes[n].style.bottom = 0 + "px";
-                            list.childNodes[m].style.backgroundColor = "red";
-                            list.childNodes[n].style.backgroundColor = "red";
-                        },500*(m+1)*n)                  
+                var m = 0,
+                n =  0,
+                temp = null,
+                timer = setInterval(function(){
+                    for(var q = 0; q < list.childNodes.length; q++){
+                        list.childNodes[q].className = "";
                     }
+                    if(m >= list.childNodes.length){
+                        for(var e = 0; e < list.childNodes.length; e++){
+                            list.childNodes[e].className = "fin";
+                        }
+                        clearInterval(timer);
+                        return;
+                    }
+                    if(n >= list.childNodes.length - m - 1){
+                        m++;
+                        n = 0;
+                    }
+                    list.childNodes[n].className = "cur";
+                    list.childNodes[n+1].className = "cur";
+                    if (list.childNodes[n].offsetHeight > list.childNodes[n+1].offsetHeight) {
+                            temp = list.childNodes[n+1].offsetHeight;
+                            list.childNodes[n+1].style.height = list.childNodes[n].offsetHeight + "px";
+                            list.childNodes[n].style.height = temp + "px";
+                    }
+                    n++;
+                },100)
+            })
+            random.addEventListener("click",function(){
+                for(var j = list.childNodes.length-1; j >= 0; j--){
+                        list.removeChild(list.childNodes[j]);
+                    }
+                for(var o = 0; o < 11; o++){
+                    var item = document.createElement("li");
+                    list.appendChild(item);
+                    item.style.height = (10 + Math.round(Math.random()*90)) * 2 + "px";
                 }
             })
         })()
