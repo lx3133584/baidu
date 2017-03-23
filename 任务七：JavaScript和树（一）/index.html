@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>IFE JavaScript Task 07</title>
+    <style>
+        *{margin: 0;padding: 0;}
+        html,body{
+            height: 100%;
+        }
+        body>div{
+            margin: 200px auto;
+            width: 70%;
+            height: 30%;
+        }
+        body>div>div>div>div{
+            height: 50px;
+        }
+        div{
+            margin: 15px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-grow: 2;
+            border: 2px #000000 solid;
+            background: #ffffff;
+        }
+        .cur{
+            background: blue;
+        }
+        footer{
+            margin: 0 auto;
+            width: 30%;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="root">
+        <div>
+            <div>
+                <div></div>
+                <div></div>
+            </div>
+            <div>
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+        <div>
+            <div>
+                <div></div>
+                <div></div>
+            </div>
+            <div>
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <button id="pre">先序遍历</button>
+        <button id="mid">中序遍历</button>
+        <button id="post">后序遍历</button>
+    </footer>
+    <script>
+        (function(){
+            var root = document.getElementById("root");
+            var pre = document.getElementById("pre");
+            var mid = document.getElementById("mid");
+            var post = document.getElementById("post");
+            var tree = [];
+            function preOrder(node){
+                if(node){
+                    tree.push(node);
+                    preOrder(node.firstElementChild);
+                    preOrder(node.lastElementChild);
+                }
+            }
+            function inOrder(node){
+                if(node){
+                    inOrder(node.firstElementChild);
+                    tree.push(node);
+                    inOrder(node.lastElementChild);
+                }
+            }
+            function postOrder(node){
+                if(node){
+                    postOrder(node.firstElementChild);
+                    postOrder(node.lastElementChild);
+                    tree.push(node);
+                }
+            }
+            function show(arr){
+                for(var i = 0; i < arr.length; i++){
+                    setTimeout(function(i){
+                        return function(){
+                            for(var j = 0; j < document.querySelectorAll("div").length; j++){
+                                document.querySelectorAll("div")[j].className = "";
+                            }
+                            arr[i].className = "cur";
+                        }
+                        
+                    }(i),i*500)
+                }
+            }
+            window.onload = function(){
+                pre.addEventListener("click",function(){
+                    tree = [];
+                    preOrder(root);
+                    show(tree);
+                })
+                mid.addEventListener("click",function(){
+                    tree = [];
+                    inOrder(root);
+                    show(tree);
+                })
+                post.addEventListener("click",function(){
+                    tree = [];
+                    postOrder(root);
+                    show(tree);
+                })
+            }
+        })();
+    </script>
+</body>
+</html>
