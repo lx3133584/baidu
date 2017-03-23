@@ -72,28 +72,28 @@
             var mid = document.getElementById("mid");
             var post = document.getElementById("post");
             var tree = [];
-            function preOrder(node){
+            function preOrder(node){//先序遍历
                 if(node){
                     tree.push(node);
                     preOrder(node.firstElementChild);
                     preOrder(node.lastElementChild);
                 }
             }
-            function inOrder(node){
+            function inOrder(node){//中序遍历
                 if(node){
                     inOrder(node.firstElementChild);
                     tree.push(node);
                     inOrder(node.lastElementChild);
                 }
             }
-            function postOrder(node){
+            function postOrder(node){//后序遍历
                 if(node){
                     postOrder(node.firstElementChild);
                     postOrder(node.lastElementChild);
                     tree.push(node);
                 }
             }
-            function show(arr){
+            function show(arr){//展示遍历过程
                 for(var i = 0; i < arr.length; i++){
                     setTimeout(function(i){
                         return function(){
@@ -106,7 +106,7 @@
                     }(i),i*500)
                 }
             }
-            window.onload = function(){
+            window.onload = function(){//为按钮绑定事件
                 pre.addEventListener("click",function(){
                     tree = [];
                     preOrder(root);
