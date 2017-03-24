@@ -7,18 +7,13 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>IFE JavaScript Task 08</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-        }
-        
         html,
         body {
             height: 100%;
         }
         
         body>div {
-            margin: 200px auto;
+            margin: 150px auto;
             width: 80%;
             height: 40%;
         }
@@ -36,6 +31,10 @@
         
         .cur {
             background: blue;
+        }
+        
+        .fin {
+            background: greenyellow;
         }
         
         footer {
@@ -77,65 +76,103 @@
         <div>human</div>
     </div>
     <footer>
-        <button id="pre">先序遍历</button>
-        <button id="mid">中序遍历</button>
-        <button id="post">后序遍历</button>
+        <p>
+            <input type="text" id="api-input">
+        </p>
+        <p>
+            <button id="recursive">递归遍历</button>
+            <button id="breadth">广度优先</button>
+            <button id="depth">深度优先</button>
+        </p>
     </footer>
     <script>
         (function () {
             var root = document.getElementById("root");
-            var pre = document.getElementById("pre");
-            var mid = document.getElementById("mid");
-            var post = document.getElementById("post");
+            var apiInput = document.getElementById("api-input")
+            var rec = document.getElementById("recursive");
+            var bre = document.getElementById("breadth");
+            var dep = document.getElementById("depth");
             var tree = [];
-            function preOrder(node) {
+            function recOrder(node) {//递归遍历
                 if (node) {
                     tree.push(node);
-                    preOrder(node.firstElementChild);
-                    preOrder(node.lastElementChild);
+                    if (node.children) {
+                        for (var i = 0; i < node.children.length; i++) {
+                            recOrder(node.children[i]);
+                        }
+                    }
                 }
             }
-            function inOrder(node) {
+            function breOrder(node) {//广度优先
                 if (node) {
-                    inOrder(node.firstElementChild);
-                    tree.push(node);
-                    inOrder(node.lastElementChild);
-                }
-            }
-            function postOrder(node) {
-                if (node) {
-                    postOrder(node.firstElementChild);
-                    postOrder(node.lastElementChild);
-                    tree.push(node);
-                }
-            }
-            function show(arr) {
-                for (var i = 0; i < arr.length; i++) {
-                    setTimeout(function (i) {
-                        return function () {
-                            for (var j = 0; j < document.querySelectorAll("div").length; j++) {
-                                document.querySelectorAll("div")[j].className = "";
+                    tree.push(node);//加入根节点
+                    var stack = [],item;
+                    for (var i = 0; i < node.children.length; i++) {//第一层加入栈
+                        stack.push(node.children[i]);
+                    }
+                    while (stack.length) {
+                        item = stack.shift();
+                        tree.push(item);
+                        if (item.children) {//如果有子节点则把其子节点加入栈
+                            for (var j = 0; j < item.children.length; j++) {
+                                stack.push(item.children[j]);
                             }
-                            arr[i].className = "cur";
+                        }
+                    }
+                }
+            }
+            function depOrder(node) {//深度优先
+                if (node) {
+                    tree.push(node);
+                    var stack = [],item;
+                    for (var i = 0; i < node.children.length; i++) {
+                        stack.push(node.children[i]);
+                    }
+                    while (stack.length) {
+                        item = stack.shift();
+                        tree.push(item);
+                        if (item.children) {
+                            for (var j = item.children.length - 1; j >= 0; j--) {
+                                stack.unshift(item.children[j]);
+                            }
+                        }
+                    }
+                }
+            }
+            function show(arr) {//展示遍历的过程
+                for (var i = 0, len = arr.length; i <= len; i++) {
+                    setTimeout(function (i, len) {
+                        return function () {
+                            for (var j = 0; j < document.querySelectorAll("div").length; j++) {//清楚除当前节点外其他节点的cur类
+                                var curClass = document.querySelectorAll("div")[j].className;
+                                document.querySelectorAll("div")[j].className = curClass.replace(/cur/, "");
+                            }
+                            if (i === len) {//最后一次退出循环
+                                return
+                            }
+                            arr[i].className = "cur";//当前节点添加cur类
+                            if (apiInput.value && arr[i].childNodes[0].data.indexOf(apiInput.value) !== -1) {//为匹配的节点添加fin类
+                                arr[i].className = "fin";
+                            }
                         }
 
-                    }(i), i * 500)
+                    }(i, len), i * 500)
                 }
             }
-            window.onload = function () {
-                pre.addEventListener("click", function () {
+            window.onload = function () {//添加点击事件
+                rec.addEventListener("click", function () {
                     tree = [];
-                    preOrder(root);
+                    recOrder(root);
                     show(tree);
                 })
-                mid.addEventListener("click", function () {
+                bre.addEventListener("click", function () {
                     tree = [];
-                    inOrder(root);
+                    breOrder(root);
                     show(tree);
                 })
-                post.addEventListener("click", function () {
+                dep.addEventListener("click", function () {
                     tree = [];
-                    postOrder(root);
+                    depOrder(root);
                     show(tree);
                 })
             }
