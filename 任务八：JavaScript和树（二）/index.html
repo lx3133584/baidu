@@ -88,7 +88,7 @@
     <script>
         (function () {
             var root = document.getElementById("root");
-            var apiInput = document.getElementById("api-input")
+            var apiInput = document.getElementById("api-input");
             var rec = document.getElementById("recursive");
             var bre = document.getElementById("breadth");
             var dep = document.getElementById("depth");
@@ -106,7 +106,7 @@
             function breOrder(node) {//广度优先
                 if (node) {
                     tree.push(node);//加入根节点
-                    var stack = [],item;
+                    var stack = [], item;
                     for (var i = 0; i < node.children.length; i++) {//第一层加入栈
                         stack.push(node.children[i]);
                     }
@@ -124,7 +124,7 @@
             function depOrder(node) {//深度优先
                 if (node) {
                     tree.push(node);
-                    var stack = [],item;
+                    var stack = [], item;
                     for (var i = 0; i < node.children.length; i++) {
                         stack.push(node.children[i]);
                     }
