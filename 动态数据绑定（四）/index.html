@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>动态数据绑定（四）</title>
+</head>
+
+<body>
+    <div id="app">
+        <p>姓名：{{user.name}}</p>
+        <p>年龄：{{user.age}}</p>
+    </div>
+    <script>
+        function Vue(obj) {
+            this.el = document.querySelector(obj.el);
+            this.tem = document.querySelector(obj.el).innerHTML;
+            this.data = obj.data;
+            this.walk(obj.data);
+        }
+
+        Vue.prototype.walk = function (obj) {
+            let val;
+            for (let key in obj) {
+                if (obj.hasOwnProperty(key)) {
+                    val = obj[key];
+
+                    if (typeof val === 'object') {
+                        this.walk(val);
+                    }
+                    this.convert(key, obj);
+                }
+            }
+        }
+        Vue.prototype.render = function () {
+            let nodeValue = this.tem;
+            
+            if (nodeValue === '') return;
+
+            let patt = /{{[A-Za-z0-9.]+}}/g;
+            let ret = nodeValue.match(patt);
+            if (!ret) return;
+
+            ret.forEach((value) => {
+                let property = value.replace(/[{}]/g, '');
+                if(property.indexOf('.') !== -1) {
+                    let pro = property.split('.');
+                    nodeValue = nodeValue.replace(value, this.data[pro[0]][pro[1]]);
+                }
+                nodeValue = nodeValue.replace(value, this.data[property]);
+            }, this);
+            
+            this.el.innerHTML = nodeValue;
+        }
+        Vue.prototype.convert = function (key, obj) {
+            this.render();        
+            let that = this;
+            let val = obj[key]
+            Object.defineProperty(obj, key, {
+                enumerable: true,
+                configurable: true,
+                get: function () {
+                    console.log('你访问了' + key);
+                    return val;
+                },
+                set: function (newVal) {
+                    if (typeof newVal === 'object') {
+                        new Vue(newVal);
+                    }
+                    console.log('你设置了' + key + '，新的值为' + newVal);
+                    val = newVal;
+                    that.render();
+                }
+            })
+        }
+        Vue.prototype.$watch = function (key, fn) {
+            let def = function (obj, keys) {
+                if (keys in obj) {
+                    Object.defineProperty(obj, keys, {
+                        enumerable: true,
+                        configurable: true,
+                        set: fn
+                    })
+                    return '订阅成功';
+                }
+                else {
+                    return '属性值不存在';
+                }
+            }
+            if (typeof this.data[key] === 'object') {
+                for (let child in this.data[key]) {
+                    if (this.data[key].hasOwnProperty(child)) {
+                        def(this.data[key], child);
+                    }
+                }
+            }
+            def(this.data, key)
+
+
+        }
+        let app = new Vue({
+            el: '#app',
+            data: {
+                user: {
+                    name: 'youngwind',
+                    age: 25
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
