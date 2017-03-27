@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>动态数据绑定（三）</title>
+</head>
+
+<body>
+    <script>
+        function Observer(data) {
+            this.data = data;
+            this.walk(data);
+        }
+
+        Observer.prototype.walk = function (obj) {
+            let val;
+            for (let key in obj) {
+                if (obj.hasOwnProperty(key)) {
+                    val = obj[key];
+
+                    if (typeof val === 'object') {
+                        new Observer(val);
+                    }
+                    this.convert(key, val);
+                }
+            }
+        }
+        Observer.prototype.convert = function (key, val) {
+            Object.defineProperty(this.data, key, {
+                enumerable: true,
+                configurable: true,
+                get: function () {
+                    console.log('你访问了' + key);
+                    return val;
+                },
+                set: function (newVal) {
+                    if (typeof newVal === 'object') {
+                        new Observer(newVal);
+                    }
+                    console.log('你设置了' + key + '，新的值为' + newVal);
+                    val = newVal;
+                }
+            })
+        }
+        Observer.prototype.$watch = function (key, fn) {
+            let def = function (obj, keys) {
+                if (keys in obj) {
+                    Object.defineProperty(obj, keys, {
+                        enumerable: true,
+                        configurable: true,
+                        set: fn
+                    })
+                    return '订阅成功';
+                }
+                else {
+                    return '属性值不存在';
+                }
+            }
+            if (typeof this.data[key] === 'object') {
+                for (let child in this.data[key]) {
+                    if (this.data[key].hasOwnProperty(child)) {
+                        def(this.data[key], child);
+                    }
+                }
+            }
+            def(this.data, key)
+
+
+        }
+        let app = new Observer({
+            name: 'adfa',
+            obj: {
+                age: 12
+            },
+            list: ['a', 'b', 'c']
+        });
+        let app2 = new Observer({
+            name: {
+                firstName: 'shaofeng',
+                lastName: 'liang'
+            },
+            age: 25
+        });
+    </script>
+</body>
+
+</html>
