@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>懒加载</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0
+        }
+        
+        header {
+            height: 2em;
+            line-height: 2em;
+            font-size: 36px;
+            text-align: center;
+            background: #bbb
+        }
+        
+        main ul {
+            list-style: none;
+            text-align: center
+        }
+        
+        main ul li {
+            height: 2em;
+            line-height: 2em;
+            font-size: 24px;
+            background: #ddd;
+            border-top: #999 1px solid
+        }
+        
+        #loading {
+            display: none;
+            padding: 10px 0;
+            text-align: center;
+            background: #eee
+        }
+        
+        #loading img {
+            height: 2.5em;
+            animation: rotate 0.8s infinite linear
+        }
+        
+        @keyframes rotate {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>我是标题</header>
+    <main>
+        <ul id="list">
+            <li>item 1</li>
+            <li>item 2</li>
+            <li>item 3</li>
+            <li>item 4</li>
+            <li>item 5</li>
+            <li>item 6</li>
+            <li>item 7</li>
+            <li>item 8</li>
+            <li>item 9</li>
+            <li>item 10</li>
+            <li>item 11</li>
+            <li>item 12</li>
+            <li>item 13</li>
+            <li>item 14</li>
+            <li>item 15</li>
+            <li>item 16</li>
+            <li>item 17</li>
+            <li>item 18</li>
+            <li>item 19</li>
+            <li>item 20</li>
+        </ul>
+    </main>
+    <div id="loading">
+        <img src="loading.png" alt="loading...">
+    </div>
+    <script src="lazyLoad.js"></script>
+    <script>
+        var loading = document.getElementById('loading');
+        var list = document.getElementById('list');
+        var flag = 20;
+        lazyLoadList.push(list.children[19]);
+        lazyLoad(function () {
+            loading.style.display = 'block';
+            setTimeout(function () {
+                loading.style.display = 'none';
+                for (var i = 0; i < 20; i++) {
+                    var item = document.createElement('li');
+                    flag++;
+                    item.innerHTML = 'item ' + flag;
+                    list.appendChild(item);
+                    if (i === 19) {
+                        lazyLoadList.push(item);
+                    }
+                }
+            }, 1000)
+
+
+        });
+    </script>
+</body>
+
+</html>
