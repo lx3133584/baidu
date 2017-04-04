@@ -90,18 +90,18 @@
         var loading = document.getElementById('loading');
         var list = document.getElementById('list');
         var flag = 20;
-        lazyLoadList.push(list.children[19]);
+        lazyLoadList.push(list.children[19]);//将第20个列表项加入队列
         lazyLoad(function () {
-            loading.style.display = 'block';
-            setTimeout(function () {
-                loading.style.display = 'none';
-                for (var i = 0; i < 20; i++) {
+            loading.style.display = 'block';//先显示loading图标
+            setTimeout(function () {//为了能看到效果，延迟1s执行
+                loading.style.display = 'none';//隐藏loading图标
+                for (var i = 0; i < 20; i++) {//加载后面的DOM元素
                     var item = document.createElement('li');
                     flag++;
                     item.innerHTML = 'item ' + flag;
                     list.appendChild(item);
                     if (i === 19) {
-                        lazyLoadList.push(item);
+                        lazyLoadList.push(item);//把加载出来的最后一个元素加入队列
                     }
                 }
             }, 1000)
