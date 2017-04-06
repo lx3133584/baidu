@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>自定义网页右键菜单</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0
+        }
+        
+        main {
+            margin: 200px auto;
+            width: 80%;
+            height: 200px;
+            background: #eee;
+        }
+        
+        #menu {
+            display: none;
+            position: fixed;
+            width: 100px;
+            background: #fff;
+            border: 1px solid #333;
+            box-shadow: 2px 2px 5px #999;
+        }
+        
+        #menu ul {
+            list-style: none;
+            width: 100%;
+        }
+        
+        #menu ul li {
+            padding-left: 10px;
+            height: 2em;
+            line-height: 2em;
+            color: #333;
+            border-bottom: 1px solid #333;
+            cursor: default;
+        }
+        
+        #menu ul li:hover {
+            background: #aaa;
+        }
+    </style>
+</head>
+
+<body>
+    <main id='box'>lalala lalla lallala lalalal alalalal alalalal allalala lalalala lalalalal alalalal lalalalal alalalalla</main>
+    <div id='menu'>
+        <ul>
+            <li>item 1</li>
+            <li>item 2</li>
+            <li>item 3</li>
+            <li>item 4</li>
+        </ul>
+    </div>
+    <script>
+        var box = document.getElementById('box');
+        var menu = document.getElementById('menu');
+        box.addEventListener('contextmenu', function (e) {
+            //取消系统默认菜单
+            e.preventDefault();
+            e.returnValue = false;
+            //显示自定义菜单
+            menu.style.display = 'block';
+            //通过鼠标右击位置判断菜单显示位置
+            if (e.clientX + menu.offsetWidth > document.documentElement.clientWidth) {//如果右击位置太靠右
+                menu.style.top = e.clientY + 'px';
+                menu.style.left = document.documentElement.clientWidth - menu.offsetWidth + 'px';
+                
+            }
+            else if (e.clientY + menu.offsetHeight > document.documentElement.clientHeight) {//如果右击位置太靠下
+                menu.style.top = document.documentElement.clientHeight - menu.offsetHeight + 'px';
+                menu.style.left = e.clientX + 'px';
+            }
+            else {//正常情况
+                menu.style.top = e.clientY + 'px';
+                menu.style.left = e.clientX + 'px';
+            }
+
+        })
+        document.addEventListener('click', function () {//单击其他位置菜单隐藏
+            menu.style.display = 'none';
+        })
+        menu.addEventListener('click',function(e){//点击自定义菜单条目时，弹出菜单条目名称
+            alert(e.target.innerHTML)
+        })
+    </script>
+</body>
+
+</html>
