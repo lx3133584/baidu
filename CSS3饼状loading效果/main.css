@@ -1,0 +1,66 @@
+*{margin: 0;padding: 0}
+
+body>div {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    width: 100px;
+    height: 100px;
+}
+
+body>div>span {
+    display: inline-block;
+    width: 50%;
+    height: 50%;
+    border: solid #ff298c 3px;
+    border-radius: 50%;
+    border-top-color: transparent;
+    text-align: center;
+    animation:outside-animation 0.8s infinite linear;
+    -webkit-animation:outside-animation 0.8s infinite linear; /* Safari 和 Chrome */
+}
+
+body>div>span>span {
+    display: inline-block;
+    margin-top: 5px;
+    border: 20px solid #ff298c;
+    border-radius: 50%;
+    border-top-color: #fb8bbc;
+    animation:inside-animation 2s infinite linear;
+    -webkit-animation:inside-animation 2s infinite linear; /* Safari 和 Chrome */
+}
+
+@keyframes outside-animation
+{
+0%   {
+    transform: rotate(0deg);
+}
+25%  {
+    transform: rotate(90deg);
+}
+50%  {
+    transform: rotate(180deg);
+}
+100% {
+    transform: rotate(360deg);
+}
+}
+
+@keyframes inside-animation
+{
+0%   {
+    transform: rotate(90deg);
+}
+25%  {
+    transform: rotate(180deg);
+}
+50%  {
+    transform: rotate(270deg);
+}
+100% {
+    transform: rotate(450deg);
+}
+}
